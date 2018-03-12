@@ -1,0 +1,211 @@
+
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{comment}
+\usepackage{environ}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage[letterpaper, portrait, margin=0.5in]{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+\newif\ifshowsolutions
+
+% comment the following line to hide solutions
+\showsolutionstrue
+
+\ifshowsolutions
+    \newenvironment{solution}{
+
+        \color{blue} \smallskip \textbf{Solution:}
+
+    }{}
+\else
+    \NewEnviron{solution} {
+        \ \\
+        \ \\
+    }
+\fi
+
+\begin{document}
+
+\part*{CS 70: Un\_\_tability, Counting, Probability}
+\vspace{-7pt}
+\hrule
+\vspace{7pt}
+
+\section{Uncountability}
+\begin{enumerate}
+    \item Is the powerset of $\mathbb{N}$ countable (the set of all subsets of $\mathbb{N}$)? How would you prove this?
+    \begin{solution}
+        No, do a proof by diagonalization. Assume that the powerset is countable, then we must have an infinite listing of subsets of $\mathbb{N}$: $S_0, S_1, \ldots$.
+
+        Define a subset of the naturals $S'$ by letting $x \in S'$ iff $x \notin S_x$. This is basically inverting the diagonal. Then this subset has some index $i$ in the listing,
+        but $i \in S'$ iff $i \notin S_i$ iff $i \notin S'$, which is always a contradiction.
+    \end{solution}
+    \item Are the integers $\mathbb{Z}$ countable? How about pairs of integers $(x, y)$ where $x = 0$ or $y = 0$?
+    \begin{solution}
+        Yes, see the proof presented in lecture. This constructs some bijective function that maps the even integers to positive integers and odd
+        integers to negative ones.
+
+        There is some similar proof for the pairs with one coordinate zero, except now working mod 4.
+    \end{solution}
+    \item Is a countable union of countable subsets countable? This means $\bigcup_{i} U_i$ where $i \in \mathbb{N}$.
+    \begin{solution}
+        Yes. A countable union ``looks like'' $\mathbb{N} \times \mathbb{N}$, let $(x, y)$ map to the $y$th element of $U_x$, then
+        this is a valid way to count countable unions.
+    \end{solution}
+    \item Is the set of all irrational numbers countable?
+    \begin{solution}
+        No. If it was, then the reals would be a union of two countable sets (the rationals and irrationals) and be countable. This is a contradiction,
+        because as proved in class, the reals aren't countable.
+    \end{solution}
+    \item Is the set of all programs countable?
+    \begin{solution}
+        Yes. There are many ways to encode programs with numbers, one of them is ASCII, like giving each letter in the program a bit. But the important thing is we can give at least
+        one number for each possible program.
+    \end{solution}
+    \item Show that there are numbers in $\mathbb{R}$ that cannot be computed. (Wow!!!)
+    \begin{solution}
+        We showed the set of programs is countable. The set of inputs is countable too, so the set of all pairs of programs and inputs we could run them
+        on $(P, x)$ is also countable. Then, since each pair $(P, x)$ corresponds to one possible output the program could give, the set of all possible outputs
+        all possible programs could give on all possible inputs is still countable! But inside the reals which are strictly bigger than countable sets,
+        this means we have real numbers that could not be computed by any program! Intuitively, these have to be `infinite' objects with an infinite amount of information
+        that a program would never give to us in finite time, like $\pi$.
+    \end{solution}
+\end{enumerate}
+\section{Uncomputability}
+\begin{enumerate}
+    \item Consider the following program: 
+    \begin{lstlisting}[language=Python] 
+def is_mod_2(P):
+    if (P implements the mod 2 function):
+        return True 
+    else:
+        return False
+    \end{lstlisting}
+    Show it cannot exist as a program.
+    \begin{solution}
+    Assume that it does, we can then solve the halting problem with a program! We want to build halt so that it uses \texttt{is\_mod\_2}.
+    
+\begin{lstlisting}
+def halt(P, x):
+    def Q(y):
+        P(x)
+        return y % 2
+    return is_mod_2(Q)
+\end{lstlisting}
+
+    We basically modify the program P into Q so that is\_mod can tell us whether P halts! Notice that if P halts, then running $P(x)$ will finish,
+    so then Q implements the mod 2 function. But if P doesn't halt, then Q doesn't halt, so it can't implement the is\_mod\_2.
+
+    \end{solution}
+    \item Consider this program:
+    \begin{lstlisting}[language=Python]
+def returns_42_on_42(P):
+    x = P(42)
+    if x = 42:
+        return True
+    else:
+        return False
+    \end{lstlisting}
+    Can this exist? What if we replace the if condition with \texttt{if P(42) eventually halts and gives us 42}?
+    \begin{solution}
+    Yes it can! We just wrote it. :) 
+    More intuitively, this program calls P, meaning that it doesn't really do any ``magic'' to analyze P and figure out if
+    it halts or not. This is very different from the program that returns true if $P(42)$ eventually halts, because that one
+    performs the magic to figure out that $P$ does eventually halt, and even if P does not halt, it still will.
+    \end{solution}
+\end{enumerate}
+
+\section{Counting}
+\begin{enumerate}
+    \item How many permutations of SUPERMAN are there?
+    \begin{solution}
+        There are no repeated letters here, so we just have $8!$.
+    \end{solution}
+    \item How many for ARKANSAS?
+    \begin{solution}
+        We can start with $8!$, but this makes all the As and Ss mean different objects we are arranging, and we want to consider
+        them as the same. We can divide by $3!$ to get rid of
+        overcounting the As and divide by $2!$ to get rid of the Ss.
+    \end{solution}
+    \item We have 5 cookies we are trying to divide between 3 students. How many ways are there to divide the cookies among all the students?
+    \begin{solution}
+    This becomes a stars and bars problem. There are 2 bars, not 3 (because 2 bars makes 3 `compartments' to give people cookies), and 5 stars for each
+    cookie. Then this is ${7 \choose 2}$, as we are just choosing the locations for the 2 bars which determines how many cookies each person gets.
+    \end{solution}
+    \item How many ways are there if we want to give every student at least one cookie?
+    \begin{solution}
+    First give each student a cookie! Now we are just trying to distribute 2 cookies among 3 students, ignoring the 3 cookies we just gave,
+    which is ${4 \choose 2}$.
+    \end{solution}
+
+    \item Let $p, q$ be prime. How many numbers are there among $1, 2, \ldots (pq)^2$ that are relatively prime to $pq$?
+    \begin{solution}
+    This is an example of inclusion, exclusion. $p, 2p, \ldots, pqpq$ are not relatively prime to p, and $q, 2q, \ldots, pqpq$ are not relatively
+    prime to $q$. That gives $pq^2$ numbers not relatively prime to $p$, and $qp^2$ not relatively prime to $q$. However, we have double counted the
+    numbers that both $p$ and $q$ divide! These are $pq, 2pq, \ldots pqpq$, of which there are $pq$. So in total we have $pq^2 + qp^2 - pq$ numbers not
+    relatively prime to $p$ or $q$. But to find the numbers that are, we subtract that from all the numbers, $pqpq$, so we end up with
+    $pqpq + pq - pq^2 - qp^2$.
+    \end{solution}
+
+    \item How many combinations of even natural numbers $(x_1,x_2,x_3,x_4)$ are there such that
+    $x_1 + x_2 + x_3 + x_4 = 20$?
+    \begin{solution}
+    This is a stars and bars in disguise! Notice that if all the numbers are even, for example $4, 4, 4, 6$, we can divide both sides
+    of the equation to obtain $2 + 2 + 2 + 3 = 10$. So this is just counting how many sets of 4 non-negative natural numbers add up to 10, which is stars and bars.
+    There are 10 stars and 4 compartments / 3 bars, so we have ${13 \choose 3}$.
+    \end{solution}
+
+    \item There is a class with 2n children where n are boys and n are girls. How many ways are there to arrange them in a line so that they alternate by gender?
+    \begin{solution}
+    We already know that the boys and girls alternate by gender, i.e. BGBGBG or GBGBGB. Then either of these sequences are completely
+    determined by what order we put the boys in and what order we put the girls in, which is $(n!)^2$. That is only counting one of the
+    possibilities though, i.e. we just counted how many ways we could have BGBGBG. Multiply by 2, so $2 (n!)^2$ to get the final answer.
+    \end{solution}
+
+    \item How many ways are there to arrange them where all the girls are before all the boys?
+    \begin{solution}
+    This is a similar case, the sequence is completely determined by how we arrange the girls independently from arranging the boys, so $(n!)^2$.
+    \end{solution}
+
+    \item How many ways are there to arrange them so that all the girls are in an uninterrupted block? (there is no boy in between two girls)
+    \begin{solution}
+    This is kind of like arranging $n+1$ things, where $n$ of them are boys, and one is the giant block of $n$ girls. There are $n+1$ ways to do this.
+    Then it looks like the previous problems, now it just depends how we order the girls and boys within their respective genders, so we end up with
+    $(n+1) \cdot n! \cdot n!$.
+    \end{solution}
+
+    \item How many ways are there for neither the girls nor the boys to stand in an uninterrupted block?
+    \begin{solution}
+    This is inclusion/exclusion. There are $(2n)!$ ways to arrange the girls and boys in general. So let's subtract from that
+    the ways that either the girls or the boys stand in an uninterrupted block. Both of these are $(n+1) \cdot n! \cdot n!$.
+    But we're double counting if the all the boys and all the girls are both uninterrupted, which is number 8, done twice for
+    all the girls before all the boys and all the boys before all the girls, which is $2 (n!)^2$. Then the number of ways
+    either the girls or boys stand in an uninterrupted block is $2 (n+1) \cdot (n!)^2 - 2 \cdot (n!)^2 = 2n \cdot (n!)^2$. Finally,
+    we have to subtract that from $(2n)!$ to get $(2n)! - 2n \cdot (n!)^2$.
+    \end{solution}
+
+    \item Use a combinatorial argument to prove that $\sum_{k=0}^n {n \choose k}^2 = {2n \choose n}$.
+    \begin{solution}
+        ${n \choose k} = {n \choose n - k}$. So now let's try to show 
+
+        \[
+            \sum_{k=0}^n {n \choose k} {n \choose n -k } = {2n \choose n}
+        \]
+
+        The right hand side is just picking $n$ items from $2n$. For the left hand side, split the $2n$ set into two $n$-sized sets, call them the left and right sets.
+        Then our strategy is to still pick $n$ items, where these items could come from either set. We first have to pick how many come from the left set,
+        call that $k$. Then the number that come from the right set is $n-k$, so the number of ways to pick $n$ elements where $k$ are from the
+        left and $n-k$ are from the right is ${n \choose k} {n \choose n-k}$.
+    \end{solution}
+
+    \item Give a combinatorial proof of ${k+n - 1 \choose n-1} = \sum_{i=0}^k {k-i+n-2 \choose n-2}$.
+    \begin{solution}
+    I'll omit the solution because I'll put this on the next worksheet :)
+    \end{solution}
+
+\end{enumerate}
+\end{document}
+    
