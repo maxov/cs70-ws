@@ -1,0 +1,121 @@
+
+\documentclass{article}
+    \usepackage[utf8]{inputenc}
+    \usepackage{comment}
+    \usepackage{environ}
+    \usepackage{listings}
+    \usepackage{xcolor}
+    \usepackage[letterpaper, portrait, margin=1in]{geometry}
+    \usepackage{amsmath}
+    \usepackage{amssymb}
+    \usepackage{graphicx}
+    \usepackage{hyperref}
+    
+    \newif\ifshowsolutions
+    
+    % comment the following line to hide solutions
+    % \showsolutionstrue
+    
+    \ifshowsolutions
+        \newenvironment{solution}{
+
+            \color{blue} \smallskip \textbf{Solution:}}{}
+    \else
+        \NewEnviron{solution} {
+            \ \\
+            \ \\
+            \ \\
+        }
+    \fi
+    
+    \begin{document}
+    
+    \part*{Inequalities, Estimation, Markov Chains (?)}
+    \vspace{-7pt}
+    \hrule
+    \vspace{7pt}
+    \section{Inequalities}
+    \begin{enumerate}
+        \item What is Markov's inequality? How do you prove it?
+        \begin{solution}
+        \end{solution}
+        \item What is Chebyshev's inequality? How do you prove it?
+        \begin{solution}
+        \end{solution}
+        \item In what situations can we use the Central Limit Theorem? What does it tell us? Does it give us a definitely true bound?
+        \begin{solution}
+        \end{solution}
+        \item Let $X$ be the sum of 20 i.i.d geometric random variables $X_1, \ldots X_{20}$ with parameter $p = \frac{1}{2}$. Find an upper bound of $P(X \geq 26)$ using:
+        \begin{enumerate}
+            \item Markov's inequality:
+            \begin{solution}
+            \end{solution}
+            \item Chebyshev's inequality:
+            \begin{solution}
+            \end{solution}
+        \end{enumerate}
+        \item I want to take a student pool to find the popularity of CS 70 (assume each student independently likes it with probability $p$), and I need to pay each student \$1 to get
+        their opinion. Suppose I want to estimate $p$ within 1 percent accuracy with a 95\% confidence level, I want to find how much money I need to
+        find my estimate.
+        \begin{enumerate}
+            \item What estimator could you use for $p$ from a set of samples, $X_1, X_2, \ldots, X_n$? (it should have expectation $p$).
+            \begin{solution}
+            \end{solution}
+            \item What is an upper bound on the variance of your estimator that does not depend on $p$?
+            \begin{solution}
+            \end{solution}
+            \item How much money would I need to spend if I use the CLT?
+            \begin{solution}
+            \end{solution}
+            \item How about if I use the Chebyshev bound?
+            \begin{solution}
+            \end{solution}
+        \end{enumerate}
+     \end{enumerate}
+     \section{Estimation}
+     \begin{enumerate}
+        \item How do we define covariance of random variables? How is this related to independence?
+        \begin{solution}
+        \end{solution}
+        \item Let $X \sim \text{Expo}(3)$, then define $Y \sim \text{Poiss}(X)$.
+        \begin{enumerate}
+            \item What is $E[Y|X]$? How can we find $E[Y]$?
+            \begin{solution}
+            \end{solution}
+            \item What is $E[X|Y]$?
+            \begin{solution}
+            \end{solution}
+            \item How do we find $cov(X, Y)$? Do we expect it to be positive or negative?
+            \begin{solution}
+            \end{solution}
+            \item How do we find $L[Y|X]$? Which is smaller, $E[(Y - E[Y|X])^2]$, or $E[(Y - L[Y|X])^2]$?
+            \begin{solution}
+            \end{solution}
+        \end{enumerate}
+        \item Some T/F:
+        \begin{enumerate}
+            \item If $X_1$ and $X_2$ are i.i.d $\text{Expo}(1)$ random variables, $\text{cov}(\text{min}(X_1, X_2), \text{max}(X_2, X_2)) = 0$. 
+            \begin{solution}
+            \end{solution}
+            \item If $X \sim \text{Geom}(p)$, then $E[X + m | X > n] = m+n+E[X]$.
+            \begin{solution}
+            \end{solution}
+        \end{enumerate}
+     \end{enumerate}
+     \section{Markov Chains???}
+     Yes, we haven't talked about Markov chains in 70 yet, so I don't expect you to know any of this. We will talk about this just to introduce some
+     concepts.
+     \begin{enumerate}
+        \item You flip a fair coin repeatedly until you get 2 heads in a row or 2 heads in 3 tosses. We wish to find the expected number of tosses you need
+        before you stop.
+        \begin{enumerate}
+            \item Draw a Markov chain corresponding to this process, where the goal state is terminal (we cannot leave it).
+            \begin{solution}
+            \end{solution}
+            \item What is the expected number of tosses you need to stop? Just set up the equations.
+            \begin{solution}
+            \end{solution}
+        \end{enumerate}
+     \end{enumerate}
+    \end{document}
+        
